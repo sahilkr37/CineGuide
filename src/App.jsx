@@ -1,13 +1,7 @@
-
+import Layout from "./components/Layout"
 function App() {
 
-
-  return (
-    <>
-      <div className="text-3xl font-bold text-red ">Hello CineGuide</div>
-    </>
-  )
+  return <Layout />
 }
 
 export default App
- 
