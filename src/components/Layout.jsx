@@ -1,13 +1,17 @@
 import { createBrowserRouter } from "react-router"
 import { RouterProvider } from "react-router"
-import Login from "./Login"
+import Auth from "./Auth"
 import Browse from "./Browse"
 
 const Layout = () => {
     const appRouter = createBrowserRouter([
         {
             path: "/",
-            element: <Login />
+            element: <Auth mode="login" />
+        },
+        {
+            path: "/signup",
+            element: <Auth mode="signup" />
         },
         {
             path: "/browse",
@@ -23,4 +27,3 @@ const Layout = () => {
 }
 export default Layout
 
-  
