@@ -1,7 +1,7 @@
-import { createBrowserRouter } from "react-router"
-import { RouterProvider } from "react-router"
+import { createBrowserRouter, RouterProvider } from "react-router"
 import Auth from "./Auth"
 import Browse from "./Browse"
+
 
 const Layout = () => {
     const appRouter = createBrowserRouter([
@@ -19,6 +19,7 @@ const Layout = () => {
         },
 
     ])
+
     return (
         <div>
             <RouterProvider router={appRouter} />

@@ -1,6 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Header from "./Header";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { signInWithRedirect, getRedirectResult, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
+import { auth } from "../firebase"
+import { useDispatch } from "react-redux";
+import { FcGoogle } from "react-icons/fc";
+import { addUser, removeUser } from "../utils/userSlice";
 
 export default function Auth({ mode = "login" }) {
     const isLogin = mode === "login";
@@ -8,6 +13,35 @@ export default function Auth({ mode = "login" }) {
     const [Passerror, setPassError] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const provider = new GoogleAuthProvider();
+    const navigate = useNavigate()
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        getRedirectResult(auth)
+            .then((result) => {
+                if (result?.user) {
+                    const { uid, displayName, email, photoURL } = result.user;
+                    dispatch(setUser({ uid, displayName, email, photoURL }));
+                }
+            })
+            .catch((error) => console.error("Login error:", error));
+
+        // Keep listening for auth state changes
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            if (user) {
+                const { uid, displayName, email, photoURL } = user;
+                dispatch(addUser({ uid, displayName, email, photoURL }));
+            } else {
+                dispatch(removeUser());
+            }
+        });
+
+        return () => unsubscribe();
+    }, [auth, dispatch]);
+
+
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -27,17 +61,51 @@ export default function Auth({ mode = "login" }) {
         } else setPassError("")
 
         if (valid) {
-            console.log("Form Submitted:", { email, password });
             alert(isLogin ? "Logging in..." : "Signing up...");
+            isLogin ? signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    // Signed in 
+                    const user = userCredential.user;
+                    console.log(user)
+                    navigate("/browse")
+                    // ...
+                })
+                .catch((error) => {
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    setPassError(errorMessage)
+                })
+                : createUserWithEmailAndPassword(auth, email, password)
+                    .then((userCredential) => {
+                        // Signed up 
+                        const user = userCredential.user;
+                        console.log(user)
+                        navigate("/browse")
+                        // ...
+                    })
+                    .catch((error) => {
+                        const errorCode = error.code;
+                        const errorMessage = error.message;
+                        setPassError(errorMessage)
+                        // ..
+                    })
+
         }
     }
 
 
     return (
         <div className="relative min-h-screen w-full bg-black text-white">
+            <div className="absolute inset-0 hidden sm:block">
+                <img
+                    src="https://m.media-amazon.com/images/G/31/AmazonVideo/2021/X-site/MLP/TVOD/TVOD_MLP_Right.jpg"
+                    alt="background"
+                    className="w-full h-full object-cover sm:displa"
+                />
+                <div className="absolute inset-0 bg-black/50" />
+            </div>
             <Header />
 
-            {/* Container */}
             <div className="relative flex items-center px-4 sm:px-6 md:px-10 min-h-screen">
                 <div className="bg-black/80 p-6 sm:p-8 md:p-10 rounded-md w-full max-w-md md:max-w-lg">
                     <h1 className="text-2xl sm:text-3xl font-bold mb-6">{isLogin ? "Sign In" : "Sign Up"}</h1>
@@ -94,6 +162,9 @@ export default function Auth({ mode = "login" }) {
                         </span></Link >
                     </p>)}
 
+                    <button className="my-3 flex items-center justify-center gap-2 w-full sm:w-auto px-4 py-2 border border-gray-300 rounded-lg shadow-sm bg-white hover:bg-gray-100 transition cursor-pointer" onClick={() => {
+                        signInWithRedirect(auth, provider);
+                    }}><FcGoogle size={20} /><span className="text-gray-700 font-medium">Sign in with Google</span></button>
 
                 </div>
             </div>
