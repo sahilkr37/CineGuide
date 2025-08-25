@@ -1,11 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Header from "./Header";
-import { Link, useNavigate } from "react-router";
-import { signInWithRedirect, getRedirectResult, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
+import { Link } from "react-router";
+import { signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, onAuthStateChanged } from "firebase/auth";
 import { auth } from "../firebase"
+
 import { useDispatch } from "react-redux";
+import { addUser } from "../utils/userSlice";
+
 import { FcGoogle } from "react-icons/fc";
-import { addUser, removeUser } from "../utils/userSlice";
+
 
 export default function Auth({ mode = "login" }) {
     const isLogin = mode === "login";
@@ -14,31 +17,10 @@ export default function Auth({ mode = "login" }) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const provider = new GoogleAuthProvider();
-    const navigate = useNavigate()
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        getRedirectResult(auth)
-            .then((result) => {
-                if (result?.user) {
-                    const { uid, displayName, email, photoURL } = result.user;
-                    dispatch(setUser({ uid, displayName, email, photoURL }));
-                }
-            })
-            .catch((error) => console.error("Login error:", error));
 
-        // Keep listening for auth state changes
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-            if (user) {
-                const { uid, displayName, email, photoURL } = user;
-                dispatch(addUser({ uid, displayName, email, photoURL }));
-            } else {
-                dispatch(removeUser());
-            }
-        });
-
-        return () => unsubscribe();
-    }, [auth, dispatch]);
+    const name = useRef(null)
 
 
 
@@ -66,9 +48,6 @@ export default function Auth({ mode = "login" }) {
                 .then((userCredential) => {
                     // Signed in 
                     const user = userCredential.user;
-                    console.log(user)
-                    navigate("/browse")
-                    // ...
                 })
                 .catch((error) => {
                     const errorCode = error.code;
@@ -79,15 +58,20 @@ export default function Auth({ mode = "login" }) {
                     .then((userCredential) => {
                         // Signed up 
                         const user = userCredential.user;
-                        console.log(user)
-                        navigate("/browse")
-                        // ...
+                        updateProfile(user, {
+                            displayName: name.current.value,
+                            photoURL: `https://ui-avatars.com/api/?name=${encodeURIComponent(name.current.value)}&background=3b38a0&color=fff`
+                        })
+                            .then(() => {
+                                const { uid, email, displayName, photoURL } = auth.currentUser;
+                                dispatch(addUser({ uid: uid, email: email, displayName: displayName, photoURL: photoURL, }))
+                            })
                     })
                     .catch((error) => {
                         const errorCode = error.code;
                         const errorMessage = error.message;
                         setPassError(errorMessage)
-                        // ..
+
                     })
 
         }
@@ -112,6 +96,7 @@ export default function Auth({ mode = "login" }) {
 
                     <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
                         {!isLogin && (<input
+                            ref={name}
                             type="text"
                             placeholder="Enter Name"
                             className="p-3 rounded bg-neutral-800 border border-neutral-700 focus:outline-none  focus:border-white focus:scale-105 transition duration-300 ease-in-out shadow-sm focus:shadow-white/20"
@@ -163,7 +148,14 @@ export default function Auth({ mode = "login" }) {
                     </p>)}
 
                     <button className="my-3 flex items-center justify-center gap-2 w-full sm:w-auto px-4 py-2 border border-gray-300 rounded-lg shadow-sm bg-white hover:bg-gray-100 transition cursor-pointer" onClick={() => {
-                        signInWithRedirect(auth, provider);
+                        signInWithPopup(auth, provider)
+                            .then((result) => {
+                                console.log("Google login success:", result.user);
+                                // You don't need to manually dispatch, onAuthStateChanged in Header will handle it
+                            })
+                            .catch((error) => {
+                                console.error("Google login error:", error.message);
+                            });
                     }}><FcGoogle size={20} /><span className="text-gray-700 font-medium">Sign in with Google</span></button>
 
                 </div>
