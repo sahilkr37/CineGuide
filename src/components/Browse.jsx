@@ -1,11 +1,19 @@
-import React from 'react'
 import Header from './Header'
+import usePopularMovies from '../hooks/usePopularMovies'
+import MainContainer from './MainContainer'
+import SecondaryContainer from './SecondaryContainer'
+
+
 
 function Browse() {
+    usePopularMovies()
+
     return (
         <div>
             <Header />
-            i am browse
+            <MainContainer />
+            <SecondaryContainer />
+
         </div >
     )
 }
