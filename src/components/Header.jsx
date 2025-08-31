@@ -22,7 +22,7 @@ function Header() {
     const user = useSelector((store) => store.user);
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
-            console.log("Auth state changed:", user); // 👀 Debug
+            // console.log("Auth state changed:", user); 
             if (user) {
                 const { uid, email, displayName, photoURL } = user;
                 dispatch(

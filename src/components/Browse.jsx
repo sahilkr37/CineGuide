@@ -9,7 +9,7 @@ function Browse() {
     usePopularMovies()
 
     return (
-        <div>
+        <div className='bg-black'>
             <Header />
             <MainContainer />
             <SecondaryContainer />
