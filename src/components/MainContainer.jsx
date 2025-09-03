@@ -4,19 +4,19 @@ import { useSelector } from "react-redux";
 import MainContainerDetails from "./MainContainerDetails";
 
 function MainContainer() {
-    const popularMovies = useSelector((store) => store.movies?.popularMovies);
+    const nowPlaying = useSelector((store) => store.movies?.nowPlaying);
 
     // Random movie state
     const [mainMovie, setMainMovie] = useState(null);
     const [trailerKey, setTrailerKey] = useState(null);
 
-    // pick random movie whenever popularMovies changes
+    // pick random movie whenever nowPlaying changes
     useEffect(() => {
-        if (popularMovies?.length > 0) {
-            const randomIndex = Math.floor(Math.random() * popularMovies.length);
-            setMainMovie(popularMovies[randomIndex].id);
+        if (nowPlaying?.length > 0) {
+            const randomIndex = Math.floor(Math.random() * nowPlaying.length);
+            setMainMovie(nowPlaying[randomIndex].id);
         }
-    }, [popularMovies]);
+    }, [nowPlaying]);
 
     const getMovieVideo = async () => {
         if (!mainMovie) return;

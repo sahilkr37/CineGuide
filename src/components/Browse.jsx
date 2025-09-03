@@ -6,6 +6,7 @@ import SecondaryContainer from './SecondaryContainer'
 
 
 function Browse() {
+    useFetchMovies('now_playing')
     useFetchMovies('popular')
     useFetchMovies('upcoming')
     useFetchMovies('top_rated')
