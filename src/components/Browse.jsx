@@ -1,12 +1,14 @@
 import Header from './Header'
-import usePopularMovies from '../hooks/usePopularMovies'
+import useFetchMovies from '../hooks/useFetchMovies'
 import MainContainer from './MainContainer'
 import SecondaryContainer from './SecondaryContainer'
 
 
 
 function Browse() {
-    usePopularMovies()
+    useFetchMovies('popular')
+    useFetchMovies('upcoming')
+    useFetchMovies('top_rated')
 
     return (
         <div className='bg-black'>
