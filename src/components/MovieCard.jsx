@@ -1,15 +1,30 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Heart, Play } from 'lucide-react'
+import { options } from '../utils/constants'
 
 
-const MovieCard = ({ path, movieName }) => {
+const MovieCard = ({ path, movieName, movieId }) => {
     const [showOverlay, setShowOverlay] = useState(false)
     const [liked, setLiked] = useState(false);
+    const [videoUrl, setVideoUrl] = useState()
     const handleToggle = () => {
         if (window.innerWidth < 640) {
             setShowOverlay(!showOverlay);
         }
     }
+    useEffect(() => {
+        const fetchVideoUrl = async () => {
+            const url = `https://api.themoviedb.org/3/movie/${movieId}/videos?language=en-US`
+            const res = await fetch(url, options)
+            const json = await res.json()
+
+            const trailer = json.results.find((video) => video.type === "Trailer") || json.results[0];
+            // console.log(trailer)
+            setVideoUrl(`https://www.youtube.com/watch?v=${trailer?.key}`)
+
+        }
+        fetchVideoUrl()
+    }, [])
     return (
 
         <div className="relative shrink-0 group cursor-pointer " onClick={handleToggle}>
@@ -30,7 +45,7 @@ const MovieCard = ({ path, movieName }) => {
                     {movieName}
                 </h3>
                 <div className="flex justify-center items-center gap-2">
-                    <a href="https://youtu.be/2ZhB-YO5Tnk?list=TLGGqFgGHjojeCEwMzA5MjAyNQ" onClick={(e) => e.stopPropogation()} target="_blank" className='bg-white cursor-pointer bg-opacity-70 text-black p-1 sm:p-2 rounded-lg   hover:bg-white/80 flex items-center justify-center'>
+                    <a href={videoUrl} onClick={(e) => e.stopPropogation()} target="_blank" className='bg-white cursor-pointer bg-opacity-70 text-black p-1 sm:p-2 rounded-lg   hover:bg-white/80 flex items-center justify-center'>
                         <Play className='sm:w-5 sm:h-5 w-4 h-4 transition-all duration-200 ease-in-out transform' />
                     </a>
                     <button

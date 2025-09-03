@@ -37,7 +37,6 @@ export default function Auth({ mode = "login" }) {
         } else setEmailError("")
 
         if (!passwordRegex.test(password)) {
-            console.log(password)
             setPassError("Use a strong password with minimum 8 characters. Must include 1 uppercase, 1 lowercase, 1 digit, 1 special character.");
             valid = false
         } else setPassError("")
