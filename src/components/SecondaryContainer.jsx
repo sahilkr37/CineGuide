@@ -7,6 +7,9 @@ function SecondaryContainer() {
   const popularMovies = useSelector((store) => store.movies?.popularMovies)
   const upcomingMovies = useSelector((store) => store.movies?.upcomingMovies)
   const top_rated = useSelector((store) => store.movies?.top_rated)
+  const genres = useSelector((store) => store.movies?.genre)
+  const moviesByGenres = useSelector((store) => store.movies.moviesByGenre)
+
 
 
   return (
@@ -15,6 +18,15 @@ function SecondaryContainer() {
       <HorizontalScrollCard movies={popularMovies} title={'Popular Movies'} />
       <HorizontalScrollCard movies={upcomingMovies} title={'Upcoming Movies'} />
       <HorizontalScrollCard movies={top_rated} title={'Top Rated'} />
+      {
+        genres.map((g) => {
+          const movies = moviesByGenres[g.id]
+          return (
+            <HorizontalScrollCard id={g.id} movies={movies} title={g.name} />
+          )
+        })
+      }
+
     </div>
   )
 }
