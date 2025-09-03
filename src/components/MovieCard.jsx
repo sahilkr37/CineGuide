@@ -14,13 +14,16 @@ const MovieCard = ({ path, movieName, movieId }) => {
     }
     useEffect(() => {
         const fetchVideoUrl = async () => {
+            if (!movieId) return;
             const url = `https://api.themoviedb.org/3/movie/${movieId}/videos?language=en-US`
             const res = await fetch(url, options)
             const json = await res.json()
 
-            const trailer = json.results.find((video) => video.type === "Trailer") || json.results[0];
+            const trailer = json.results?.find((video) => video.type === "Trailer") || json.results[0];
             // console.log(trailer)
-            setVideoUrl(`https://www.youtube.com/watch?v=${trailer?.key}`)
+            if (trailer) {
+                setVideoUrl(`https://www.youtube.com/watch?v=${trailer.key}`);
+            }
 
         }
         fetchVideoUrl()
@@ -45,7 +48,7 @@ const MovieCard = ({ path, movieName, movieId }) => {
                     {movieName}
                 </h3>
                 <div className="flex justify-center items-center gap-2">
-                    <a href={videoUrl} onClick={(e) => e.stopPropogation()} target="_blank" className='bg-white cursor-pointer bg-opacity-70 text-black p-1 sm:p-2 rounded-lg   hover:bg-white/80 flex items-center justify-center'>
+                    <a href={videoUrl} onClick={(e) => e.stopPropagation()} target="_blank" className='bg-white cursor-pointer bg-opacity-70 text-black p-1 sm:p-2 rounded-lg   hover:bg-white/80 flex items-center justify-center'>
                         <Play className='sm:w-5 sm:h-5 w-4 h-4 transition-all duration-200 ease-in-out transform' />
                     </a>
                     <button
