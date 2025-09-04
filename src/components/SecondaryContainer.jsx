@@ -13,7 +13,7 @@ function SecondaryContainer() {
 
 
   return (
-    <div className='relative sm:py-10 py-0 sm:ml-20 ml-3 z-10 sm:-mt-100 md:-mt-70 -mt-35 sm:space-y-20 space-y-5 '>
+    <div className='relative sm:py-10 py-0 sm:ml-20 ml-3 z-10 sm:-mt-100 md:-mt-70 -mt-35 sm:space-y-20 space-y-5 bg-transparent'>
       <HorizontalScrollCard movies={now_playing} title={'Now Playing'} />
       <HorizontalScrollCard movies={popularMovies} title={'Popular Movies'} />
       <HorizontalScrollCard movies={upcomingMovies} title={'Upcoming Movies'} />

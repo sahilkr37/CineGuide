@@ -28,6 +28,8 @@ const MovieCard = ({ path, movieName, movieId }) => {
         }
         fetchVideoUrl()
     }, [])
+
+
     return (
 
         <div className="relative shrink-0 group cursor-pointer " onClick={handleToggle}>

@@ -16,3 +16,7 @@ body {
     scrollbar-width: none;
     /* Firefox */
 }
+html,
+body {
+    overflow-x: hidden;
+}
