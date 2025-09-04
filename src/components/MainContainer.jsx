@@ -52,9 +52,9 @@ function MainContainer() {
                         allow="autoplay; encrypted-media; fullscreen"
                     ></iframe>
                 ) : (
-                    <p className="text-white text-xl flex justify-center items-center h-full">
+                    <div className="text-white text-xl flex justify-center items-center h-full">
                         <LoadingSpinner />
-                    </p>
+                    </div>
                 )}
                 <MainContainerDetails mainMovieId={mainMovie} />
             </div>

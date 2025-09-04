@@ -21,7 +21,7 @@ function SecondaryContainer() {
       {genres.map((g) => {
         const movies = moviesByGenres[g.id]
         return (
-          <HorizontalScrollCard id={g.id} movies={movies} title={g.name} />
+          <HorizontalScrollCard key={g.id} id={g.id} movies={movies} title={g.name} />
         )
       })}
 
