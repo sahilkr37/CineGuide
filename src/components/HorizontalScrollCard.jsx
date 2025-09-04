@@ -19,11 +19,11 @@ function HorizontalScrollCard({ movies, title }) {
                 <h2 className=" text-white sm:text-4xl text-lg font-bold sm:mb-5 mb-2 md:text-2xl">{title}</h2>
                 <div>
                     <div className='flex relative'>
-                        <div className=' flex overflow-x-scroll scrollbar-hide gap-7 w-[100%] '>
-                            {Array(8).fill().map((_, i) => (
+                        <div className=' flex overflow-x-scroll scrollbar-hide gap-5 '>
+                            {Array(10).fill().map((_, i) => (
                                 <div
                                     key={i}
-                                    className="bg-white animate-pulse rounded-lg w-80 h-80"
+                                    className="bg-white animate-pulse rounded-lg sm:w-55 w-25 sm:h-80 h-40 md:w-45 object-contain shrink-0"
                                 >
                                     <div className="h-[80%] bg-gray-600 rounded-t-lg"></div>
                                     <div className="p-2 space-y-2">

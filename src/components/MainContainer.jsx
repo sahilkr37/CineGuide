@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { options } from "../utils/constants";
 import { useSelector } from "react-redux";
 import MainContainerDetails from "./MainContainerDetails";
+import LoadingSpinner from './LoadingSpinner'
 
 function MainContainer() {
     const nowPlaying = useSelector((store) => store.movies?.nowPlaying);
@@ -52,7 +53,7 @@ function MainContainer() {
                     ></iframe>
                 ) : (
                     <p className="text-white text-xl flex justify-center items-center h-full">
-                        Loading trailer...
+                        <LoadingSpinner />
                     </p>
                 )}
                 <MainContainerDetails mainMovieId={mainMovie} />

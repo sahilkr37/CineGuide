@@ -1,4 +1,3 @@
-import React from 'react'
 import { useSelector } from 'react-redux'
 import HorizontalScrollCard from './HorizontalScrollCard'
 
@@ -18,14 +17,13 @@ function SecondaryContainer() {
       <HorizontalScrollCard movies={popularMovies} title={'Popular Movies'} />
       <HorizontalScrollCard movies={upcomingMovies} title={'Upcoming Movies'} />
       <HorizontalScrollCard movies={top_rated} title={'Top Rated'} />
-      {
-        genres.map((g) => {
-          const movies = moviesByGenres[g.id]
-          return (
-            <HorizontalScrollCard id={g.id} movies={movies} title={g.name} />
-          )
-        })
-      }
+
+      {genres.map((g) => {
+        const movies = moviesByGenres[g.id]
+        return (
+          <HorizontalScrollCard id={g.id} movies={movies} title={g.name} />
+        )
+      })}
 
     </div>
   )
