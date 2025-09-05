@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 export const aiKeySlice = createSlice({
     name: "aiKey",
-    initialState: { aiKey: localStorage.getItem("aiKey") || "" },
+    initialState: { aiKey: localStorage.getItem("aiKey") || "", searchResult: null, searchMovieList: null },
     reducers: {
         addAIKey: (state, action) => {
             state.aiKey = action.payload;
@@ -12,8 +12,14 @@ export const aiKeySlice = createSlice({
             state.aiKey = "";
             localStorage.removeItem("aiKey");
         },
+        addSearchResult: (state, action) => {
+            state.searchResult = action.payload
+        },
+        addSearchMovieList: (state, action) => {
+            state.searchMovieList = action.payload
+        }
     },
 });
 
-export const { addAIKey, clearAIKey } = aiKeySlice.actions;
+export const { addAIKey, clearAIKey, addSearchResult, addSearchMovieResult } = aiKeySlice.actions;
 export default aiKeySlice.reducer;

@@ -1,11 +1,15 @@
 import React, { useState } from 'react'
 import { Search, X } from "lucide-react";
 import useAiSearch from '../hooks/useAiSearch';
+import { useDispatch, useSelector } from 'react-redux';
+
 
 const SearchBar = () => {
     const [showSearch, setShowSearch] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
-    const { result, searchMovies, loading } = useAiSearch();
+    const { searchMovies, loading } = useAiSearch();
+    const dispatch = useDispatch()
+    const searchResult = useSelector((store) => store.aiKey.searchResult)
 
 
     const handleSearch = (e) => {
@@ -45,9 +49,9 @@ const SearchBar = () => {
                         }}>{loading ? "..." : <Search className="text-amber-600 shrink-0 cursor-pointer hover:scale-120 transition-all" />}</button>
                     </div>
 
-                    {result && (
+                    {searchResult && (
                         <div className="mt-4 p-4 rounded">
-                            <p>{result}</p>
+                            <p>{searchResult}</p>
                         </div>
                     )}
 
