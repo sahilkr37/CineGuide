@@ -6,6 +6,9 @@ import { useNavigate } from "react-router";
 import { addUser, removeUser } from "../redux/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import SearchBar from "./SearchBar";
+import KeyInput from "./KeyInput";
+
+import { clearAIKey } from "../redux/aiKeySlice";
 
 
 function Header() {
@@ -13,6 +16,7 @@ function Header() {
     const dispatch = useDispatch();
     const [showProfileMenu, setShowProfileMenu] = useState(false);
     const [active, setActive] = useState("Movies");
+    const [showKeyInputBox, setShowKeyInputBox] = useState(false);
 
     const profileRef = useRef(null);
 
@@ -57,7 +61,7 @@ function Header() {
                 {user && (
                     <>
                         <div className="hidden md:flex gap-6 lg:gap-8 text-sm sm:text-base md:text-lg font-semibold">
-                            {["Movies", "TV Shows", "My List"].map((item) => (
+                            {["Movies", "My List"].map((item) => (
                                 <button
                                     key={item}
                                     onClick={() => setActive(item)}
@@ -73,6 +77,7 @@ function Header() {
 
                         <div className="flex gap-5 items-center">
                             <SearchBar />
+                            {(showKeyInputBox) && <KeyInput showKeyInputBox={showKeyInputBox} setShowKeyInputBox={setShowKeyInputBox} />}
 
                             <div className="relative" ref={profileRef}>
                                 <img
@@ -86,33 +91,37 @@ function Header() {
                                     <div className="absolute right-0 mt-2 w-40 sm:w-48 bg-black text-white rounded-lg shadow-lg border border-amber-600 overflow-hidden">
                                         <button
                                             onClick={() => navigate("/profile")}
-                                            className="w-full text-left px-4 py-2 hover:bg-amber-600 transition"
+                                            className="w-full cursor-pointer text-left px-4 py-2 hover:bg-amber-600 transition"
                                         >
                                             View Profile
                                         </button>
                                         <button
-                                            onClick={() => navigate("/settings")}
-                                            className="w-full text-left px-4 py-2 hover:bg-amber-600 transition"
+                                            onClick={() => setShowKeyInputBox(!showKeyInputBox)}
+                                            className="w-full cursor-pointer text-left px-4 py-2 hover:bg-amber-600 transition"
                                         >
-                                            Settings
+                                            OpenAI Key
                                         </button>
                                         <button
                                             onClick={() => {
                                                 signOut(auth)
-                                                    .then(() => { })
+                                                    .then(() => {
+                                                        dispatch(clearAIKey()); // clear API key after successful logout
+                                                        navigate("/"); // redirect to home or login
+                                                    })
                                                     .catch(() => navigate("/error"));
                                             }}
-                                            className="w-full text-left px-4 py-2 hover:bg-red-600 transition"
+                                            className="w-full cursor-pointer text-left px-4 py-2 hover:bg-red-600 transition"
                                         >
                                             Sign Out
                                         </button>
+
                                     </div>
                                 )}
                             </div>
                         </div>
                     </>
                 )}
-            </div>
+            </div >
 
 
         </>

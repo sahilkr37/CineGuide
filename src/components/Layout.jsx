@@ -1,6 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router"
 import Auth from "./Auth"
 import Browse from "./Browse"
+import KeyInput from "./KeyInput"
 
 
 const Layout = () => {
@@ -16,6 +17,10 @@ const Layout = () => {
         {
             path: "/browse",
             element: <Browse />
+        },
+        {
+            path: "/keyInput",
+            element: <KeyInput />
         },
 
     ])

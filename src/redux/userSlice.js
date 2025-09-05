@@ -9,7 +9,7 @@ export const userSlice = createSlice({
         },
         removeUser: (state, action) => {
             return null
-        }
+        },
     }
 })
 export const { addUser, removeUser } = userSlice.actions
