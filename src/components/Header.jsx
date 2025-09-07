@@ -11,6 +11,7 @@ import KeyInput from "./KeyInput";
 import { clearAIKey } from "../redux/aiKeySlice";
 
 
+
 function Header() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -21,6 +22,7 @@ function Header() {
     const profileRef = useRef(null);
 
     const user = useSelector((store) => store.user);
+    const apiKey = useSelector((store) => store.aiKey.aiKey)
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             // console.log("Auth state changed:", user); 
@@ -90,7 +92,7 @@ function Header() {
                                 {showProfileMenu && (
                                     <div className="absolute right-0 mt-2 w-40 sm:w-48 bg-black text-white rounded-lg shadow-lg border border-amber-600 overflow-hidden">
                                         <button
-                                            onClick={() => navigate("/profile")}
+                                            onClick={() => navigate("/")}
                                             className="w-full cursor-pointer text-left px-4 py-2 hover:bg-amber-600 transition"
                                         >
                                             View Profile
@@ -99,7 +101,7 @@ function Header() {
                                             onClick={() => setShowKeyInputBox(!showKeyInputBox)}
                                             className="w-full cursor-pointer text-left px-4 py-2 hover:bg-amber-600 transition"
                                         >
-                                            OpenAI Key
+                                            Gemini API Key {apiKey ? "✅" : "❌"}
                                         </button>
                                         <button
                                             onClick={() => {
